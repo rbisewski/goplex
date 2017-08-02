@@ -17,6 +17,16 @@ package main
 //
 import (
     "fmt"
+    "math"
+    "os"
+)
+//
+// Globals
+//
+var (
+
+    // speed of light in a vaccuum, in m/s
+    c float64 = 299792458.0
 )
 
 //! Function to calculate the perihelion shift of an orbit
@@ -32,7 +42,19 @@ func perihelion_shift(L float64, T float64, e float64) (float64) {
     // variable declaration
     var result float64 = 0.0
 
-    // TODO: insert code here
+    // calculate the spherical shape of the semi-major axis
+    dividend := 24 * math.Pi * math.Pi * math.Pi * L * L
+
+    // calculate the velocity of the orbital body
+    divisor := T * T * c * c * (1 - e * e)
+
+    // safety check, if the divisor is zero, return 0
+    if divisor == 0 {
+        return 0;
+    }
+
+    // combine both to obtain the perihelion
+    result = dividend / divisor
 
     // if we got this far, go ahead and return the result
     return result;
@@ -49,7 +71,7 @@ func main() {
     //
     // Perihelion Shift Calculation
     //
-    var perihelion_shift_expected_result = 0
+    var perihelion_shift_expected_result float64 = 0
     var L float64 = 0
     var T float64 = 0
     var e float64 = 0
