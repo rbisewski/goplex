@@ -46,5 +46,22 @@ func main() {
     // tell the end-user the tests are starting
     fmt.Println("Goplex tests begin now...");
 
-    // TODO: insert tests here
+    //
+    // Perihelion Shift Calculation
+    //
+    var perihelion_shift_expected_result = 0
+    var L float64 = 0
+    var T float64 = 0
+    var e float64 = 0
+    var perihelion_shift_test float64 = perihelion_shift(L, T, e)
+
+    // do a quick check to ensure this actually gave the right result
+    if perihelion_shift_test != perihelion_shift_expected_result {
+        fmt.Println("Perihelion Shift test failed!")
+        os.Exit(1)
+    }
+
+    //
+    // TODO: insert further tests here
+    //
 }
