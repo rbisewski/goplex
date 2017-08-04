@@ -35,6 +35,36 @@ var (
     universal_gravitation_constant float64 = 0.0000000000667408
 )
 
+//! Tsiolkovsky rocket equation
+/*
+ * @param    float64    effective exhaust velocity         --> Ve
+ * @param    float64    initial total mass (w/ propellant) --> m0
+ * @param    float64    final total mass (w/o propellant)  --> mf
+ *
+ * @result   float64    delta-v
+ */
+func tsiolkovsky_delta_v(Ve float64, m0 float64, mf float64) (float64) {
+
+    // input validation
+    if mf == 0 {
+        return 0;
+    }
+
+    // calculate the mass ratio, i.e. the different between the initial
+    // propellant and the final mass w/o propellant
+    var ratio_of_initial_to_dry_mass float64 = m0 / mf
+
+    // determine the natural log of the mass ratio
+    var nlog_of_mass_ratio float64 = math.Log(ratio_of_initial_to_dry_mass)
+
+    // figure out the total energy requiring during the change of mass
+    // over the start and end of the launch, otherwise known as the delta-V
+    var delta_v float64 = Ve * nlog_of_mass_ratio
+
+    // go ahead and return the values
+    return delta_v
+}
+
 //! Function to calculate the perihelion shift of an orbit
 /*
  * @param    float64    semi-major axis      --> L
@@ -78,9 +108,26 @@ func main() {
     fmt.Println("Goplex tests begin now...");
 
     //
+    // Tsiolkovsky Delta-V Launch
+    //
+    var delta_v_expected_result float64 = 8684.035604021843
+    var Ve float64 = 17000.0
+    var m0 float64 = 5000.0
+    var mf float64 = 3000.0
+    var delta_v_test = tsiolkovsky_delta_v(Ve, m0, mf)
+
+    // test to ensure this got the expected result
+    if delta_v_expected_result != delta_v_test {
+        fmt.Println("Tsiolkovsky Delta-V test failed!")
+        fmt.Println("Expected: ", delta_v_expected_result)
+        fmt.Println("Calculated: ", delta_v_test)
+        os.Exit(1)
+    }
+
+    //
     // Perihelion Shift Calculation, of Mercury
     //
-    var perihelion_shift_expected_result float64 = 0
+    var perihelion_shift_expected_result float64 = 0.0
     var L float64 = 57909050.0
     var T float64 = 47.362
     var e float64 = 0.205630
