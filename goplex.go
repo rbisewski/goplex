@@ -25,6 +25,9 @@ import (
 //
 var (
 
+    // seconds in a single Earth day
+    seconds_in_a_day float64 = 86400
+
     // Speed of light in a vaccuum, in m/s
     c float64 = 299792458.0
 
@@ -45,15 +48,18 @@ func perihelion_shift(L float64, T float64, e float64) (float64) {
     // variable declaration
     var result float64 = 0.0
 
+    // speed of light in kilometers per second
+    var c_in_km_per_second float64 = c * 1000
+
     // calculate the spherical shape of the semi-major axis
-    dividend := 24 * math.Pi * math.Pi * math.Pi * L * L
+    var dividend float64 = 24 * math.Pi * math.Pi * math.Pi * L * L
 
     // calculate the velocity of the orbital body
-    divisor := T * T * c * c * (1 - e * e)
+    var divisor float64 = T * T * c_in_km_per_second * c_in_km_per_second * (1 - e * e)
 
     // safety check, if the divisor is zero, return 0
-    if divisor == 0 {
-        return 0;
+    if divisor == 0.0 {
+        return 0.0;
     }
 
     // combine both to obtain the perihelion
@@ -84,7 +90,8 @@ func main() {
     if perihelion_shift_test != perihelion_shift_expected_result {
         fmt.Println("Perihelion Shift test failed!")
         fmt.Println("Expected: ", perihelion_shift_expected_result)
-        fmt.Println("Calculated: ", perihelion_shift_test)
+        fmt.Println("Calculated: ", perihelion_shift_test *
+        seconds_in_a_day * 59)
         os.Exit(1)
     }
 
