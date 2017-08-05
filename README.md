@@ -3,6 +3,11 @@
 This repo contains a collection of various mathematical disciplines that
 have been written in golang, for convenient use with other golang code.
 
+Currently it contains the following formulae:
+
+* Relativistic Perihelion Shift
+* Tsoilkovsky Delta-V
+
 Feel free to fork it and use it for other projects if you find it
 useful.
 
