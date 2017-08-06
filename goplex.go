@@ -33,6 +33,9 @@ var (
 
     // Universal gravitational constant, in m^3 kg^-1 s^-2
     universal_gravitation_constant float64 = 0.0000000000667408
+
+    // Planck constant, in Joule seconds
+    planck_constant = 6.626069934 * math.Pow(10, -34)
 )
 
 //! Tsiolkovsky rocket equation
@@ -63,6 +66,24 @@ func tsiolkovsky_delta_v(Ve float64, m0 float64, mf float64) (float64) {
 
     // go ahead and return the values
     return delta_v
+}
+
+//! Function to calculate the energy of a photon
+/*
+ * @param    float64    wavelength --> l
+ *
+ * @result   float64    energy of a photon, in Joules
+ */
+func photon_energy(l float64) (float64) {
+
+    // if wavelength is zero, return zero
+    if l == 0 {
+        return 0
+    }
+
+    // compare the wavelength to the planck constant w/ speed of light
+    // and then obtain the ratio of that to the wavelength
+    return planck_constant * c / l
 }
 
 //! Function to calculate the perihelion shift of an orbit
@@ -121,6 +142,22 @@ func main() {
         fmt.Println("Tsiolkovsky Delta-V test failed!")
         fmt.Println("Expected: ", delta_v_expected_result)
         fmt.Println("Calculated: ", delta_v_test)
+        os.Exit(1)
+    }
+
+    //
+    // Energy of a photon with a wavelength of 400nm
+    //
+    var photon_energy_expected_result float64 = 4.966114480984394 *
+      math.Pow(10, -19)
+    var wavelength float64 = 400 * math.Pow(10, -9)
+    var photon_energy_test = photon_energy(wavelength)
+
+    // test to ensure this got the expected result
+    if photon_energy_expected_result != photon_energy_test {
+        fmt.Println("Photon Energt test failed!")
+        fmt.Println("Expected: ", photon_energy_expected_result)
+        fmt.Println("Calculated: ", photon_energy_test)
         os.Exit(1)
     }
 
