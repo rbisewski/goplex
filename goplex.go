@@ -36,6 +36,12 @@ var (
 
     // Planck constant, in Joule seconds
     planck_constant = 6.626069934 * math.Pow(10, -34)
+
+    // Boltzmann constant, in Joules per Kelvin
+    //
+    // TODO: consider implementing eV / K as well in the future
+    //
+    boltzmann_constant = 1.38064852 * math.Pow(10, -23)
 )
 
 //! Tsiolkovsky rocket equation
@@ -84,6 +90,39 @@ func photon_energy(l float64) (float64) {
     // compare the wavelength to the planck constant w/ speed of light
     // and then obtain the ratio of that to the wavelength
     return planck_constant * c / l
+}
+
+//! Thermal velocity of a heated gas
+/*
+ * @param    float64    gravity acceleration at sea-level --> g
+ * @param    float64    temperature, in Kelvins           --> T
+ * @param    float64    mass of exhaust, per molecule     --> m
+ *
+ * @result   float64    velocity of the gas in question
+ */
+func thermal_velocity_of_heated_gas(g float64, T float64,
+  m float64) (float64) {
+
+    // input validation
+    if T < 0 || g == 0 || m == 0 {
+        return 0
+    }
+
+    // inverse of the acceleration
+    var inverse_g float64 = 1 / g
+
+    // ratio of the boltzmann & temperature to the molecular mass
+    var boltz_ratio_to_mass float64 = 3 * boltzmann_constant * T / m
+
+    // since this deals with fluid dynamics in space, take the square of
+    // the boltz-mass ratio
+    var square_of_boltz_ratio float64 = math.Sqrt(boltz_ratio_to_mass)
+
+    // apply the inverse g, which yields the specific impulse
+    var specific_impulse float64 = inverse_g * square_of_boltz_ratio
+
+    // go ahead and return the thermal velocity
+    return specific_impulse
 }
 
 //! Function to calculate the perihelion shift of an orbit
@@ -155,9 +194,27 @@ func main() {
 
     // test to ensure this got the expected result
     if photon_energy_expected_result != photon_energy_test {
-        fmt.Println("Photon Energt test failed!")
+        fmt.Println("Photon Energy test failed!")
         fmt.Println("Expected: ", photon_energy_expected_result)
         fmt.Println("Calculated: ", photon_energy_test)
+        os.Exit(1)
+    }
+
+    //
+    // Thermal velocity of gas propellant
+    //
+    var thermal_velocity_of_gas_expected_result float64 = 0.000
+    var g float64               = 9.8000
+    var m float64               = 0.8100     // RP-1 density
+    var temp_in_kelvins float64 = 3670.0000  // RP-1 temp
+    var thermal_velocity_of_gas_test float64 = thermal_velocity_of_heated_gas(g,
+      temp_in_kelvins, m)
+
+    // test to ensure this got the expected result
+    if thermal_velocity_of_gas_expected_result != thermal_velocity_of_gas_test {
+        fmt.Println("Thermal velocity test failed!")
+        fmt.Println("Expected: ", thermal_velocity_of_gas_expected_result)
+        fmt.Println("Calculated: ", thermal_velocity_of_gas_test)
         os.Exit(1)
     }
 
