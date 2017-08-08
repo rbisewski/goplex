@@ -38,10 +38,10 @@ var (
     planck_constant = 6.626069934 * math.Pow(10, -34)
 
     // Boltzmann constant, in Joules per Kelvin
-    //
-    // TODO: consider implementing eV / K as well in the future
-    //
-    boltzmann_constant = 1.38064852 * math.Pow(10, -23)
+    boltzmann_constant_joules = 1.38064852 * math.Pow(10, -23)
+
+    // Boltzmann constant, in eV per Kelvin
+    boltzmann_constant_ev = 8.6173303 * math.Pow(10, -5)
 )
 
 //! Tsiolkovsky rocket equation
@@ -112,7 +112,7 @@ func thermal_velocity_of_heated_gas(g float64, T float64,
     var inverse_g float64 = 1 / g
 
     // ratio of the boltzmann & temperature to the molecular mass
-    var boltz_ratio_to_mass float64 = 3 * boltzmann_constant * T / m
+    var boltz_ratio_to_mass float64 = 3 * boltzmann_constant_ev * T / m
 
     // since this deals with fluid dynamics in space, take the square of
     // the boltz-mass ratio
@@ -203,7 +203,7 @@ func main() {
     //
     // Thermal velocity of gas propellant
     //
-    var thermal_velocity_of_gas_expected_result float64 = 0.000
+    var thermal_velocity_of_gas_expected_result float64 = 0.11043619735553113
     var g float64               = 9.8000
     var m float64               = 0.8100     // RP-1 density
     var temp_in_kelvins float64 = 3670.0000  // RP-1 temp
