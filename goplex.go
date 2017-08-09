@@ -42,6 +42,9 @@ var (
 
     // Boltzmann constant, in eV per Kelvin
     boltzmann_constant_ev = 8.6173303 * math.Pow(10, -5)
+
+    // Vacuum permittivity, in Farads per metre
+    vacuum_permittivity = 8.854187817 * math.Pow(10, -12)
 )
 
 //! Tsiolkovsky rocket equation
@@ -153,6 +156,34 @@ func lorentz_factor(v float64) (float64) {
     return 1 / sqrt_factor
 }
 
+//! Function to calculate the Abraham-Lorentz force
+/*
+ * @param    float64    charge            --> q
+ * @param    float64    electric constant --> e0
+ * @param    float64    jerk              --> a
+ *
+ * @result   float64    time dilation ratio
+ */
+func abraham_lorentz_force(q float64, e0 float64, a float64) (float64) {
+
+    // ensure that the electrical constant isn't zero
+    if e0 == 0.0 {
+        return 0.0
+    }
+
+    // calculate the square of the charge
+    var square_of_charge float64 = q * q
+
+    // calculate the charged field value, for a vacuum
+    var charged_field_value float64 = 6 * math.Pi * e0 * c * c * c
+
+    // calculate the ratio of the charge to the value of the field
+    var ratio_of_charge_to_field = square_of_charge / charged_field_value
+
+    // adjust the field with the given jerk value
+    return ratio_of_charge_to_field * a
+}
+
 //! Function to calculate the perihelion shift of an orbit
 /*
  * @param    float64    semi-major axis      --> L
@@ -258,6 +289,24 @@ func main() {
         fmt.Println("Lorentz factor test failed!")
         fmt.Println("Expected: ", lorentz_factor_expected)
         fmt.Println("Calculated: ", lorentz_factor_test)
+        os.Exit(1)
+    }
+
+    //
+    // Abraham-Lorentz force for a up quark in a vacuum
+    //
+    var up_force_present_in_vacuum_expected float64 = 9.6857127934588849 *
+      math.Pow(10,-16)
+    var up_quark_q float64 = 0.66666666
+    var grav_jerk float64 = 9.8
+    var up_force_present_in_vacuum_test float64 =
+      abraham_lorentz_force(up_quark_q, vacuum_permittivity, grav_jerk)
+
+    // test to ensure this got the expected result
+    if up_force_present_in_vacuum_expected != up_force_present_in_vacuum_test {
+        fmt.Println("Abraham-Lorentz test failed!")
+        fmt.Println("Expected: ", up_force_present_in_vacuum_expected)
+        fmt.Println("Calculated: ", up_force_present_in_vacuum_test)
         os.Exit(1)
     }
 
