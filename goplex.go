@@ -125,6 +125,34 @@ func thermal_velocity_of_heated_gas(g float64, T float64,
     return specific_impulse
 }
 
+//! Function to calculate the relativistic doppler effect
+/*
+ * @param    float64    velocity   --> v
+ *
+ * @result   float64    time dilation ratio
+ */
+func lorentz_factor(v float64) (float64) {
+
+    // ensure that the velocity is not equal to c
+    if v == c {
+        return 0.0
+    }
+
+    // determine the square factor
+    var square_factor float64 = 1 - ((v * v) / (c * c))
+
+    // take the square root of the factor
+    var sqrt_factor float64 = math.Sqrt(square_factor)
+
+    // safety check, ensure that that factor is not zero
+    if sqrt_factor == 0.0 {
+        return 0.0
+    }
+
+    // go ahead and return the inverse square root
+    return 1 / sqrt_factor
+}
+
 //! Function to calculate the perihelion shift of an orbit
 /*
  * @param    float64    semi-major axis      --> L
@@ -215,6 +243,21 @@ func main() {
         fmt.Println("Thermal velocity test failed!")
         fmt.Println("Expected: ", thermal_velocity_of_gas_expected_result)
         fmt.Println("Calculated: ", thermal_velocity_of_gas_test)
+        os.Exit(1)
+    }
+
+    //
+    // Calculate the Lorentz factor of 0.5c
+    //
+    var lorentz_factor_expected float64 = 1.1547005383792517
+    var half_c float64                  = c / 2
+    var lorentz_factor_test float64     = lorentz_factor(half_c)
+
+    // test to ensure this got the expected result
+    if lorentz_factor_expected != lorentz_factor_test {
+        fmt.Println("Lorentz factor test failed!")
+        fmt.Println("Expected: ", lorentz_factor_expected)
+        fmt.Println("Calculated: ", lorentz_factor_test)
         os.Exit(1)
     }
 
