@@ -120,14 +120,14 @@ func main() {
     var L float64 = 57909050.0
     var T float64 = 47.362
     var e float64 = 0.205630
-    var perihelion_shift_test float64 = perihelion_shift(L, T, e)
+    var perihelion_shift_test float64 = perihelion_shift(L, T, e) *
+      seconds_in_a_day * 59
 
     // do a quick check to ensure this actually gave the right result
     if perihelion_shift_test != perihelion_shift_expected_result {
         fmt.Println("Perihelion Shift test failed!")
         fmt.Println("Expected: ", perihelion_shift_expected_result)
-        fmt.Println("Calculated: ", perihelion_shift_test *
-        seconds_in_a_day * 59)
+        fmt.Println("Calculated: ", perihelion_shift_test)
         os.Exit(1)
     }
 
