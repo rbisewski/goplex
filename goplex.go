@@ -116,7 +116,7 @@ func main() {
     //
     // Perihelion Shift Calculation, of Mercury
     //
-    var perihelion_shift_expected_result float64 = 0.0
+    var perihelion_shift_expected_result float64 = 0.065884179454766778
     var L float64 = 57909050.0
     var T float64 = 47.362
     var e float64 = 0.205630
@@ -131,7 +131,6 @@ func main() {
         os.Exit(1)
     }
 
-    //
-    // TODO: insert further tests here
-    //
+    // otherwise everything turned out fine
+    fmt.Println("All tests completed successfully!")
 }
