@@ -190,3 +190,27 @@ func perihelion_shift(L float64, T float64, e float64) (float64) {
     return result;
 }
 
+//! Function to calculate the Schwarzschild radius for a given mass,
+//! i.e. sphere escape velocity at the speed of light.
+/*
+ * @param    float64    mass --> M
+ *
+ * @result   float64    Schwarzschild radius, in units
+ */
+func schwarzschild_radius(M float64) (float64) {
+
+    // input validation
+    if M <= 0.0 {
+        return 0.0;
+    }
+
+    // speed of light in a vacuum, squared
+    var speed_of_light_in_vac_squared float64 = c * c;
+
+    // ratio of mass to gravity, as per the universal constant
+    var ratio_of_mass_to_gravity float64 = 2 *
+      universal_gravitation_constant * M
+
+    // pass back the calcuated value
+    return ratio_of_mass_to_gravity / speed_of_light_in_vac_squared;
+}

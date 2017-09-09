@@ -44,4 +44,7 @@ var (
 
     // Vacuum permittivity, in Farads per metre
     vacuum_permittivity = 8.854187817 * math.Pow(10, -12)
+
+    // Mass of the planet Earth, in kilograms
+    mass_of_the_earth = 5.97237 * math.Pow(10, 24)
 )
