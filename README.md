@@ -7,6 +7,7 @@ Currently it contains the following formulae:
 
 * Relativistic Perihelion Shift
 * Tsoilkovsky Delta-V
+* Schwarzschild radius
 
 Feel free to fork it and use it for other projects if you find it
 useful.
