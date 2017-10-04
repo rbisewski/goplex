@@ -5,7 +5,9 @@ have been written in golang, for convenient use with other golang code.
 
 Currently it contains the following formulae:
 
+* Lorentz factor
 * Relativistic Perihelion Shift
+* Thermal velocity
 * Tsoilkovsky Delta-V
 * Schwarzschild radius
 
